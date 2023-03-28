@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <TargetFramework>net6.0-windows</TargetFramework>
+        <UseWPF>true</UseWPF>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="SkiaSharp" />
+      <PackageReference Include="SkiaSharp.Views" />
+      <PackageReference Include="SkiaSharp.Views.WPF" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Boids.Domain\Boids.Domain.csproj" />
+    </ItemGroup>
+
+</Project>

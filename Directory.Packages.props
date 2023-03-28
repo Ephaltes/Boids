@@ -1,0 +1,12 @@
+<Project>
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageVersion Include="SkiaSharp" Version="2.88.3" />
+    <PackageVersion Include="SkiaSharp.Views" Version="2.88.3" />
+    <PackageVersion Include="SkiaSharp.Views.WPF">
+      <Version>2.88.3</Version>
+    </PackageVersion>
+  </ItemGroup>
+</Project>
