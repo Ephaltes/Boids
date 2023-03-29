@@ -28,11 +28,11 @@ namespace Visualizer
         private readonly Stopwatch _stopwatch;
         public MainWindow()
         {
-            _gameField = new GameField(800, 450, 10);
+            _gameField = new GameField(1280, 720, 10);
 
             DispatcherTimer dispatcherTimer = new DispatcherTimer();
             dispatcherTimer.Tick += dispatcherTimer_Tick;
-            dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, 10);
+            dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 1/128);
             dispatcherTimer.Start();
 
             _stopwatch = new Stopwatch();
@@ -40,7 +40,7 @@ namespace Visualizer
             InitializeComponent();
         }
 
-        private void dispatcherTimer_Tick(object sender, EventArgs e)
+        private void dispatcherTimer_Tick(object? sender, EventArgs e)
         {
             _stopwatch.Restart();
             _gameField.MoveBoids();

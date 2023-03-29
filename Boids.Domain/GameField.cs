@@ -8,6 +8,8 @@ namespace Boids.Domain;
 
 public class GameField
 {
+    private const float MaxSpeed = 1;
+    private const float MinSpeed = 0.3f;
     private readonly float _height;
 
     private readonly float _width;
@@ -32,9 +34,13 @@ public class GameField
         for (int i = 0; i < boidCount; i++)
         {
             Boids.Add(new Boid(
-                new Position((float)(random.NextDouble() * _width), (float)random.NextDouble() * _height),
-                new Speed((float)random.NextDouble() * 2 - 1, (float)random.NextDouble() * 2 - 1),
-                random.Next(1, 5)
+                new Position(
+                    (float)(random.NextDouble() * _width),
+                    (float)random.NextDouble() * _height),
+                new Speed(
+                    (float)random.NextDouble() * (MaxSpeed - MinSpeed) + MinSpeed,
+                    (float)random.NextDouble() * (MaxSpeed - MinSpeed) + MinSpeed),
+                (float)random.NextDouble() * (MaxSpeed - MinSpeed) + MinSpeed
             ));
         }
     }
@@ -43,9 +49,8 @@ public class GameField
     {
         Parallel.ForEach(Boids, boid =>
                                 {
-                                    boid.MoveTowardsGroup(Boids);
-                                    boid.AvoidCollisionWithBoids(Boids);
-                                    boid.FlyWithGroup(Boids);
+                                    boid.MoveTowardsGroup(Boids, 0.0001f);
+                                    boid.FlyWithGroup(Boids, 0.01f);
                                     boid.AvoidCollisionWithWall(_width, _height);
                                     boid.Move();
                                 });
