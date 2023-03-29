@@ -51,7 +51,7 @@ public class GameField
                                 {
                                     boid.MoveTowardsGroup(Boids, 0.0001f);
                                     boid.FlyWithGroup(Boids, 0.01f);
-                                    boid.AvoidCollisionWithWall(_width, _height);
+                                    boid.AvoidCollisionWithWall(_width, _height, 0.05f);
                                     boid.Move();
                                 });
     }

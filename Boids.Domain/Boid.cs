@@ -76,18 +76,18 @@ public class Boid
             Speed.Y - (Speed.Y - meanVelY) * factor
         );
     }
-    public void AvoidCollisionWithWall(float maxWidth, float maxHeight)
+    public void AvoidCollisionWithWall(float maxWidth, float maxHeight, float factor)
     {
         //avoid collisions with the walls
         if (Position.X < Padding)
-            Speed = new Speed(Speed.X + 0.3f, Speed.Y);
+            Speed = new Speed(Speed.X + factor, Speed.Y);
         if (Position.X > maxWidth - Padding)
-            Speed = new Speed(Speed.X - 0.3f, Speed.Y);
+            Speed = new Speed(Speed.X - factor, Speed.Y);
 
         if (Position.Y < Padding)
-            Speed = new Speed(Speed.X, Speed.Y + 0.3f);
+            Speed = new Speed(Speed.X, Speed.Y + factor);
         if (Position.Y > maxHeight - Padding)
-            Speed = new Speed(Speed.X, Speed.Y - 0.3f);
+            Speed = new Speed(Speed.X, Speed.Y - factor);
     }
 
     public void Move()
