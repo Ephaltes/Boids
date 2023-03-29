@@ -28,7 +28,7 @@ namespace Visualizer
         private readonly Stopwatch _stopwatch;
         public MainWindow()
         {
-            _gameField = new GameField(1280, 720, 10);
+            _gameField = new GameField(1280, 720, 500);
 
             DispatcherTimer dispatcherTimer = new DispatcherTimer();
             dispatcherTimer.Tick += dispatcherTimer_Tick;

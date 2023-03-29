@@ -8,7 +8,7 @@ namespace Boids.Domain;
 
 public class GameField
 {
-    private const float MaxSpeed = 1;
+    private const float MaxSpeed = 1f;
     private const float MinSpeed = 0.3f;
     private readonly float _height;
 
@@ -47,6 +47,13 @@ public class GameField
 
     public void MoveBoids()
     {
+        // foreach (Boid boid in Boids)
+        // {
+        //     boid.MoveTowardsGroup(Boids, 0.0001f);
+        //     boid.FlyWithGroup(Boids, 0.01f);
+        //     boid.AvoidCollisionWithWall(_width, _height, 0.05f);
+        //     boid.Move();
+        // }
         Parallel.ForEach(Boids, boid =>
                                 {
                                     boid.MoveTowardsGroup(Boids, 0.0001f);
