@@ -1,48 +1,39 @@
 ﻿using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Engines;
 
 using Boids.Domain;
 
 namespace Boids.Benchmark;
 
 [MemoryDiagnoser]
+[RPlotExporter]
+[SimpleJob(RunStrategy.Throughput, 1, 3, 5)]
 public class Benchmark
 {
-
-    [Params(100,1000)]
+    [Params(100, 1000, 2000, 5000, 10_000, 20_000)]
     public int boidCount;
-    [Params(50)]
-    public int steps;
-    
-    [Benchmark()]
+
+    [Benchmark]
     public void Serial()
     {
-        GameField gameField = new GameField(boidCount);
+        GameField gameField = new(boidCount);
 
-        for(int i=0;i<steps;i++)
-        {
-            gameField.MoveBoidsSerial();
-        }
+        gameField.MoveBoidsSerial();
     }
 
-    [Benchmark()]
+    [Benchmark]
     public void Parallel_4()
     {
-        GameField gameField = new GameField(boidCount);
+        GameField gameField = new(boidCount);
 
-        for (int i = 0; i < steps; i++)
-        {
-            gameField.MoveBoidsParallel(4);
-        }
+        gameField.MoveBoidsParallel(4);
     }
 
-    [Benchmark()]
+    [Benchmark]
     public void Parallel_8()
     {
-        GameField gameField = new GameField(boidCount);
+        GameField gameField = new(boidCount);
 
-        for(int i=0;i<steps;i++)
-        {
-            gameField.MoveBoidsParallel(8);
-        }
+        gameField.MoveBoidsParallel(8);
     }
 }
