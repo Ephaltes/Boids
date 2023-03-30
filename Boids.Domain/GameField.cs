@@ -23,11 +23,21 @@ public class GameField
                                 {
                                     boid.MoveTowardsGroup(Boids, 0.0001f);
                                     boid.AdjustSpeedToGroup(Boids, 0.01f);
-                                    boid.AvoidCollisionWithWall(Width, Height, 0.05f);
+                                    boid.AvoidCollisionWithWall(Width, Height, 0.1f);
                                     boid.Move();
                                 });
     }
-
+    
+    public void MoveBoidsParallel(int maxDegreeOfParallelism)
+    {
+        Parallel.ForEach(Boids, new ParallelOptions { MaxDegreeOfParallelism = maxDegreeOfParallelism }, boid => 
+                                {
+                                    boid.MoveTowardsGroup(Boids, 0.0001f);
+                                    boid.AdjustSpeedToGroup(Boids, 0.01f);
+                                    boid.AvoidCollisionWithWall(Width, Height, 0.1f);
+                                    boid.Move();
+                                });
+    }
     public void MoveBoidsSerial()
     {
         foreach (Boid boid in Boids)
