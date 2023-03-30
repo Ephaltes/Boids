@@ -4,9 +4,9 @@ using SkiaSharp;
 
 namespace Visualizer;
 
-public class Renderer
+public static class Renderer
 {
-    private static readonly SKColor _boildColor = SKColors.Black;
+    private static readonly SKColor _boidColor = SKColors.Black;
 
     public static void Render(SKCanvas canvas, GameField field)
     {
@@ -21,14 +21,17 @@ public class Renderer
             boidPath.LineTo(0, 0);
 
             foreach (Boid boid in field.Boids)
-                DrawBoidDirection(boid, canvas, boidPath, _boildColor);
+                DrawBoidDirection(boid, canvas, boidPath, _boidColor);
         }
     }
 
     private static void DrawBoidDirection(Boid boid, SKCanvas canvas, SKPath boidPath, SKColor color)
     {
         using (SKPaint paint = new SKPaint
-                               { IsAntialias = true, Color = color })
+                               {
+                                   IsAntialias = true, 
+                                   Color = color
+                               })
         {
             canvas.Save();
             canvas.Translate(boid.Position.X, boid.Position.Y);

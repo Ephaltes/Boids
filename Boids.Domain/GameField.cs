@@ -1,65 +1,41 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-
-using Boids.Domain.Structures;
+﻿using System.Threading.Tasks;
 
 namespace Boids.Domain;
 
 public class GameField
 {
-    private const float MaxSpeed = 1f;
-    private const float MinSpeed = 0.3f;
-    private readonly float _height;
-
-    private readonly float _width;
-
-    public GameField(float width, float height, int boidCount)
-    {
-        _width = width;
-        _height = height;
-        Boids = new List<Boid>();
-        GenerateBoids(boidCount);
-    }
-
-    public List<Boid> Boids
+    public const int Width = 1280;
+    public const int Height = 720;
+    
+    public Boids Boids
     {
         get;
     }
 
-    private void GenerateBoids(int boidCount)
+    public GameField(int boidCount)
     {
-        Random random = new(Guid.NewGuid().GetHashCode());
-
-        for (int i = 0; i < boidCount; i++)
-        {
-            Boids.Add(new Boid(
-                new Position(
-                    (float)(random.NextDouble() * _width),
-                    (float)random.NextDouble() * _height),
-                new Speed(
-                    (float)random.NextDouble() * (MaxSpeed - MinSpeed) + MinSpeed,
-                    (float)random.NextDouble() * (MaxSpeed - MinSpeed) + MinSpeed),
-                (float)random.NextDouble() * (MaxSpeed - MinSpeed) + MinSpeed
-            ));
-        }
+        Boids = Boids.Generate(boidCount);
     }
 
-    public void MoveBoids()
+    public void MoveBoidsParallel()
     {
-        // foreach (Boid boid in Boids)
-        // {
-        //     boid.MoveTowardsGroup(Boids, 0.0001f);
-        //     boid.FlyWithGroup(Boids, 0.01f);
-        //     boid.AvoidCollisionWithWall(_width, _height, 0.05f);
-        //     boid.Move();
-        // }
-        Parallel.ForEach(Boids, boid =>
+        Parallel.ForEach(Boids, boid => 
                                 {
                                     boid.MoveTowardsGroup(Boids, 0.0001f);
-                                    boid.FlyWithGroup(Boids, 0.01f);
-                                    boid.AvoidCollisionWithWall(_width, _height, 0.05f);
+                                    boid.AdjustSpeedToGroup(Boids, 0.01f);
+                                    boid.AvoidCollisionWithWall(Width, Height, 0.05f);
                                     boid.Move();
                                 });
+    }
+
+    public void MoveBoidsSerial()
+    {
+        foreach (Boid boid in Boids)
+        {
+            boid.MoveTowardsGroup(Boids, 0.0001f);
+            boid.AdjustSpeedToGroup(Boids, 0.01f);
+            boid.AvoidCollisionWithWall(Width, Height, 0.05f);
+            boid.Move();
+        }
     }
 }

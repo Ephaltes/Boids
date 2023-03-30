@@ -24,11 +24,13 @@ public struct Position
     
     public Position Move(Speed speed)
     {
-        return new Position(X + speed.X, Y+ speed.Y);
+        return new Position(X + speed.X, Y + speed.Y);
     }
     
    public float DistanceTo(Position other)
    {
-       return (float) Math.Sqrt(Math.Pow(X - other.X, 2) + Math.Pow(Y - other.Y, 2));
+       double xDiffSquared = Math.Pow(X - other.X, 2);
+       double yDiffSquared = Math.Pow(Y - other.Y, 2);
+       return (float) Math.Sqrt(xDiffSquared + yDiffSquared);
    }
 }

@@ -1,21 +1,9 @@
 ﻿using Boids.Domain;
 
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Windows.Threading;
 
 namespace Visualizer
 {
@@ -24,29 +12,38 @@ namespace Visualizer
     /// </summary>
     public partial class MainWindow : Window
     {
-        GameField _gameField;
-        private readonly Stopwatch _stopwatch;
+        private const int BoidCount = 1500;
+
+        private readonly GameField _gameField;
+        private readonly Stopwatch _stopwatch = new Stopwatch();
+        private int _fps;
+
         public MainWindow()
         {
-            _gameField = new GameField(1280, 720, 500);
-
-            DispatcherTimer dispatcherTimer = new DispatcherTimer();
-            dispatcherTimer.Tick += dispatcherTimer_Tick;
-            dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 1/128);
-            dispatcherTimer.Start();
-
-            _stopwatch = new Stopwatch();
-
+            _gameField = new GameField(BoidCount);
             InitializeComponent();
+
+            _stopwatch.Start();
+            CompositionTarget.Rendering += Render;
         }
 
-        private void dispatcherTimer_Tick(object? sender, EventArgs e)
+        private void Render(object? sender, EventArgs e)
         {
-            _stopwatch.Restart();
-            _gameField.MoveBoids();
+            if (ShouldDisplayFps())
+            {
+                lb_fps.Content = $"{_fps} FPS";
+                _stopwatch.Restart();
+                _fps = 0;
+            }
+            
+            _gameField.MoveBoidsParallel();
             canvas.InvalidateVisual();
-            double fps = (double) _stopwatch.ElapsedTicks / Stopwatch.Frequency;
-            lb_fps.Content = $"{1 / fps:0.00} FPS";
+            _fps++;
+        }
+
+        private bool ShouldDisplayFps()
+        {
+            return _stopwatch.ElapsedMilliseconds > 1000;
         }
 
         private void canvas_PaintSurface(object sender, SkiaSharp.Views.Desktop.SKPaintSurfaceEventArgs e)

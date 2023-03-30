@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
-
-using Boids.Domain.Structures;
+﻿using Boids.Domain.Structures;
 
 namespace Boids.Domain;
 
 public class Boid
 {
+    /// <summary>
+    /// Minimum distance birds should keep to the edge of the field
+    /// </summary>
     private const int Padding = 30;
 
     public Boid(Position position, Speed speed, float movementSpeed)
@@ -33,61 +34,42 @@ public class Boid
         private set;
     }
 
-    public void MoveTowardsGroup(IReadOnlyCollection<Boid> boids, float factor)
+    public void MoveTowardsGroup(Boids boids, float factor)
     {
-        float groupCenterX = 0;
-        float groupCenterY = 0;
+        // Calculate the center of the group
+        Position center = boids.GetGroupCenter();
 
-        //calculate the center of the group
-        foreach (Boid boid in boids)
-        {
-            groupCenterX += boid.Position.X;
-            groupCenterY += boid.Position.Y;
-        }
-
-        groupCenterX /= boids.Count;
-        groupCenterY /= boids.Count;
-
-        //move towards the center of the group
+        // Move towards the center of the group
         Speed = new Speed(
-            Speed.X + (groupCenterX - Position.X) * factor,
-            Speed.Y + (groupCenterY - Position.Y) * factor
+            Speed.X + (center.X - Position.X) * factor,
+            Speed.Y + (center.Y - Position.Y) * factor
         );
     }
 
-    public void FlyWithGroup(IReadOnlyCollection<Boid> boids, float factor)
+    public void AdjustSpeedToGroup(Boids boids, float factor)
     {
-        //calculate the mean velocity of the group
-        float meanVelX = 0;
-        float meanVelY = 0;
-
-        foreach (Boid boid in boids)
-        {
-            meanVelX += boid.Speed.X;
-            meanVelY += boid.Speed.Y;
-        }
-
-        meanVelX /= boids.Count;
-        meanVelY /= boids.Count;
-
-        //fly with the group
-        Speed = new Speed(
-            Speed.X - (Speed.X - meanVelX) * factor,
-            Speed.Y - (Speed.Y - meanVelY) * factor
-        );
+        // Calculate the average velocity of the group
+        Speed averageSpeed = boids.GetAverageSpeed();
+        
+        // Adjust velocity to the group
+        float adjustmentX = (Speed.X - averageSpeed.X) * factor;
+        float adjustmentY = (Speed.Y - averageSpeed.Y) * factor;
+        Speed.Increase(adjustmentX, adjustmentY);
     }
+
     public void AvoidCollisionWithWall(float maxWidth, float maxHeight, float factor)
     {
-        //avoid collisions with the walls
+        // Avoid horizontal collision with wall
         if (Position.X < Padding)
-            Speed = new Speed(Speed.X + factor, Speed.Y);
+            Speed.Increase(factor, 0);
         if (Position.X > maxWidth - Padding)
-            Speed = new Speed(Speed.X - factor, Speed.Y);
+            Speed.Increase(-factor, 0);
 
+        // Avoid vertical collision with wall
         if (Position.Y < Padding)
-            Speed = new Speed(Speed.X, Speed.Y + factor);
+            Speed.Increase(0, factor);
         if (Position.Y > maxHeight - Padding)
-            Speed = new Speed(Speed.X, Speed.Y - factor);
+            Speed.Increase(0, -factor);
     }
 
     public void Move()
