@@ -3,6 +3,7 @@
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
   <ItemGroup>
+    <PackageVersion Include="BenchmarkDotNet" Version="0.13.5" />
     <PackageVersion Include="SkiaSharp" Version="2.88.3" />
     <PackageVersion Include="SkiaSharp.Views" Version="2.88.3" />
     <PackageVersion Include="SkiaSharp.Views.WPF">

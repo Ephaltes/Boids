@@ -18,7 +18,7 @@ namespace Visualizer;
 /// </summary>
 public partial class MainWindow : Window
 {
-    private const int BoidCount = 2000;
+    private const int BoidCount = 500;
     private readonly List<int> _fpsList = new(20);
 
     private readonly GameField _gameField = new(BoidCount);
@@ -53,9 +53,9 @@ public partial class MainWindow : Window
             _fps = 0;
         }
 
-        _gameField.MoveBoidsSerial();
+        //_gameField.MoveBoidsSerial();
         //_gameField.MoveBoidsParallel(4);
-        //_gameField.MoveBoidsParallel(8);
+        _gameField.MoveBoidsParallel(8);
 
         canvas.InvalidateVisual();
         _fps++;
