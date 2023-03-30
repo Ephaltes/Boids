@@ -12,17 +12,16 @@ namespace Visualizer
     /// </summary>
     public partial class MainWindow : Window
     {
-        private const int BoidCount = 1500;
+        private const int BoidCount = 500;
 
-        private readonly GameField _gameField;
+        private readonly GameField _gameField = new GameField(BoidCount);
         private readonly Stopwatch _stopwatch = new Stopwatch();
         private int _fps;
 
         public MainWindow()
         {
-            _gameField = new GameField(BoidCount);
             InitializeComponent();
-
+            
             _stopwatch.Start();
             CompositionTarget.Rendering += Render;
         }
@@ -43,7 +42,7 @@ namespace Visualizer
 
         private bool ShouldDisplayFps()
         {
-            return _stopwatch.ElapsedMilliseconds > 1000;
+            return _stopwatch.ElapsedMilliseconds >= 1000;
         }
 
         private void canvas_PaintSurface(object sender, SkiaSharp.Views.Desktop.SKPaintSurfaceEventArgs e)
